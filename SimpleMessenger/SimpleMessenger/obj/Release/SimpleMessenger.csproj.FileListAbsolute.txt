@@ -1,0 +1,11 @@
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\bin\Release\SimpleMessenger.exe.config
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\bin\Release\SimpleMessenger.exe
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\bin\Release\SimpleMessenger.pdb
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Release\SimpleMessenger.csproj.AssemblyReference.cache
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Release\SimpleMessenger.csproj.SuggestedBindingRedirects.cache
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Release\SimpleMessenger.Form1.resources
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Release\SimpleMessenger.Properties.Resources.resources
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Release\SimpleMessenger.csproj.GenerateResource.cache
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Release\SimpleMessenger.csproj.CoreCompileInputs.cache
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Release\SimpleMessenger.exe
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Release\SimpleMessenger.pdb
