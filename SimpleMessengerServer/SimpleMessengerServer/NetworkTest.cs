@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SimpleMessenger
+namespace SimpleMessengerServer
 {
-    public partial class Form1 : Form
+    public partial class NetworkTest : Form
     {
-        public Form1()
+        public NetworkTest()
         {
             InitializeComponent();
         }

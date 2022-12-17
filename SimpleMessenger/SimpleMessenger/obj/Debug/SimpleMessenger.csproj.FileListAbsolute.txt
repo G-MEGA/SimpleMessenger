@@ -3,9 +3,9 @@ C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\bi
 C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\bin\Debug\SimpleMessenger.pdb
 C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Debug\SimpleMessenger.csproj.AssemblyReference.cache
 C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Debug\SimpleMessenger.csproj.SuggestedBindingRedirects.cache
-C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Debug\SimpleMessenger.Form1.resources
 C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Debug\SimpleMessenger.Properties.Resources.resources
 C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Debug\SimpleMessenger.csproj.GenerateResource.cache
 C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Debug\SimpleMessenger.csproj.CoreCompileInputs.cache
 C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Debug\SimpleMessenger.exe
 C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Debug\SimpleMessenger.pdb
+C:\Users\scw97\Desktop\GitHub\SimpleMessenger\SimpleMessenger\SimpleMessenger\obj\Debug\SimpleMessenger.LoginForm.resources

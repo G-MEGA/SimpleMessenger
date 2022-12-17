@@ -1,6 +1,6 @@
-﻿namespace SimpleMessenger
+﻿namespace SimpleMessengerServer
 {
-    partial class Form1
+    partial class NetworkTest
     {
         /// <summary>
         /// Required designer variable.

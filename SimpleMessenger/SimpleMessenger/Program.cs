@@ -16,7 +16,11 @@ namespace SimpleMessenger
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            ServerInterface serverInterface = new ServerInterface();
+            serverInterface.Connect("127.0.0.1", 9999);
+
+            Application.Run(new LoginForm());
         }
     }
 }
