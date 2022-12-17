@@ -12,7 +12,7 @@ namespace SimpleMessengerServer.Classes
         byte[] fileData;
         string fileName;
 
-        public FileMessage(byte[] initialFileData, string initialFileName)
+        public FileMessage(User sender, byte[] initialFileData, string initialFileName):base(sender)
         {
             fileData = initialFileData;
             fileName = initialFileName;

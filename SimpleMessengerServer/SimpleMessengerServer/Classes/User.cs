@@ -262,5 +262,12 @@ namespace SimpleMessengerServer.Classes
                 client.SendChatting(chattingID);
             }
         }
+        public void OnChattingAddMessage(int chattingID, int messageIndex)
+        {
+            foreach (ClientCommunicationProcessor client in clients)
+            {
+                client.SendChattingMessage(chattingID, messageIndex);
+            }
+        }
     }
 }

@@ -8,9 +8,18 @@ namespace SimpleMessengerServer.Classes
 {
     internal abstract class Message
     {
-        protected int time;
+        private long time;
+        private User user;
 
-        public int GetTime() { return time; }
+        public Message(User sender)
+        {
+            time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            user = sender;
+        }
+
+        public long GetTime() { return time; }
+        public User GetUser() { return user; }
 
         public abstract string GetTextToDisplayToUser();
         public abstract string GetMessageTypeCode();

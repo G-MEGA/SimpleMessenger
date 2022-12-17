@@ -10,7 +10,7 @@ namespace SimpleMessengerServer.Classes
     {
         string text;
 
-        public TextMessage(string initialText)
+        public TextMessage(User sender, string initialText): base(sender)
         {
             text = initialText;
         }

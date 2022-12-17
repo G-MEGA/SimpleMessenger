@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,8 +66,14 @@ namespace SimpleMessengerServer.Classes
         }
         public void AddMessage(Message message)
         {
+            int messageIndex = messages.Count;
+
             messages.Add(message);
-            // To do 채팅의 메시지 목록의 메시지 추가
+
+            foreach (User u in users.Values)
+            {
+                u.OnChattingAddMessage(GetID(), messageIndex);
+            }
         }
 
         public int GetID()

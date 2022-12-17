@@ -4,6 +4,7 @@ using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SimpleMessengerServer.Classes
 {
@@ -74,6 +75,28 @@ namespace SimpleMessengerServer.Classes
                 case "startChatting":
                     request = BytesToRequestForm(bytes, 4);
                     StartChatting(request[1], request[2], request[3]);
+                    break;
+                // inviteChatting/(userID)/(chattingID)
+                case "inviteChatting":
+                    request = BytesToRequestForm(bytes);
+                    InviteChatting(request[1], request[2]);
+                    break;
+                // makeTextMessage/(chattingID)/(text)
+                case "makeTextMessage":
+                    request = BytesToRequestForm(bytes, 3);
+                    MakeTextMessage(request[1], request[2]);
+                    break;
+                // makeFileMessage/(chattingID)/(fileName)/(fileData)
+                case "makeFileMessage":
+                    request = requestHeadStr.Split("/", 4, StringSplitOptions.None);
+
+                    string requestStrWithoutFileData = request[0] + "/";
+                    requestStrWithoutFileData += request[1] + "/";
+                    requestStrWithoutFileData += request[2] + "/";
+
+                    int byteLength = StringToBytes(requestStrWithoutFileData).Length;
+
+                    MakeFileMessage(request[1], request[2], bytes[byteLength..]);
                     break;
                 default:
                     break;
@@ -149,16 +172,43 @@ namespace SimpleMessengerServer.Classes
         }
         private void StartChatting(string isOneOnOneStr, string userIDListStr, string title)
         {
-            string[] userIDList = userIDListStr.Split(',', StringSplitOptions.RemoveEmptyEntries);
-            User[] users = new User[userIDList.Length];
-            for(int i = 0; i < userIDList.Length; i++)
+            if (IsLogin())
             {
-                users[i] = userList.GetUser(userIDList[i]);
+                string[] userIDList = userIDListStr.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                User[] users = new User[userIDList.Length];
+                for (int i = 0; i < userIDList.Length; i++)
+                {
+                    users[i] = userList.GetUser(userIDList[i]);
+                }
+
+                Chatting chatting = new(title, isOneOnOneStr.Equals("true") ? true : false, users);
             }
-
-            Chatting chatting = new(title, isOneOnOneStr.Equals("false") ? false : true, users);
         }
-
+        private void InviteChatting(string userID, string chattingIDStr)
+        {
+            if (IsLogin())
+            {
+                User targetUser = userList.GetUser(userID);
+                Chatting chatting = user.GetChattings()[Convert.ToInt32(chattingIDStr)];
+                chatting.Join(targetUser);
+            }
+        }
+        private void MakeTextMessage(string chattingIDStr, string text)
+        {
+            if (IsLogin())
+            {
+                TextMessage message = new(user, text);
+                user.GetChattings()[Convert.ToInt32(chattingIDStr)].AddMessage(message);
+            }
+        }
+        private void MakeFileMessage(string chattingIDStr, string fileName, byte[] fileData)
+        {
+            if (IsLogin())
+            {
+                FileMessage message = new(user, fileData, fileName);
+                user.GetChattings()[Convert.ToInt32(chattingIDStr)].AddMessage(message);
+            }
+        }
         // userProfile/(id)/(nickname)/(selfIntroduction)
         public void SendUserProfile(string id)
         {
@@ -202,7 +252,7 @@ namespace SimpleMessengerServer.Classes
             string str = "removeChatting/" + id.ToString();
             clientInterface.Write(StringToBytes(str));
         }
-        // chattingMessage/(채팅 id)/(메시지 index)/(time)/(typeCode)/(text)
+        // chattingMessage/(채팅 id)/(메시지 index)/userID/(time int가 아니라 Long임)/(typeCode)/(text)
         public void SendChattingMessage(int id, int index)
         {
             Chatting chatting = user.GetChattings()[id];
@@ -210,7 +260,8 @@ namespace SimpleMessengerServer.Classes
 
             string str = "chattingMessage/" + id.ToString() + "/";
             str += index.ToString() + "/";
-            str += message.GetTime() + "/";
+            str += message.GetUser().GetID() + "/";
+            str += message.GetTime().ToString() + "/";
             str += message.GetMessageTypeCode() + "/";
             str += message.GetTextToDisplayToUser();
             clientInterface.Write(StringToBytes(str));
