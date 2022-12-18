@@ -18,6 +18,10 @@ namespace SimpleMessengerServer.Classes
             fileName = initialFileName;
         }
 
+        public string GetFileName()
+        {
+            return fileName;
+        }
         public byte[] GetFileData()
         {
             return fileData;

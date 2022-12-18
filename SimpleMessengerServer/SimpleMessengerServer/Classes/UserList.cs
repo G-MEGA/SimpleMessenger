@@ -40,6 +40,21 @@ namespace SimpleMessengerServer.Classes
             }
             return null;
         }
+        public List<User> SearchUser(string keyword)
+        {
+            List<User> result = new List<User>();
+
+            foreach (User user in users.Values)
+            {
+                if(user.GetID().Contains(keyword) || user.GetNickname().Contains(keyword))
+                {
+                    result.Add(user);
+                }
+            }
+
+            return result;
+        }
+
         public bool RegisterUser(string id, string password, string nickname)
         {
             if (HasID(id))

@@ -221,7 +221,11 @@ namespace SimpleMessengerServer.Classes
             if (chattings.ContainsKey(chatting.GetID()))
             {
                 chattings.Remove(chatting.GetID());
-                // To Do 채팅 목록 변경
+
+                foreach (ClientCommunicationProcessor client in clients)
+                {
+                    client.SendRemoveChatting(chatting.GetID());
+                }
                 return true;
             }
             else
@@ -259,6 +263,13 @@ namespace SimpleMessengerServer.Classes
             foreach (ClientCommunicationProcessor client in clients)
             {
                 client.SendUserProfile(newUser.GetID());
+                client.SendChatting(chattingID);
+            }
+        }
+        public void OnOtherUserExitChatting(int chattingID)
+        {
+            foreach (ClientCommunicationProcessor client in clients)
+            {
                 client.SendChatting(chattingID);
             }
         }

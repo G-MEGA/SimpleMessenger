@@ -37,9 +37,13 @@ namespace SimpleMessengerServer.Classes
 
             while (true)
             {
-                TcpClient client = listener.AcceptTcpClient();
-                ClientInterface clientInterface = new(client, userList);
-                clientInterface.StartToRead();
+                try
+                {
+                    TcpClient client = listener.AcceptTcpClient();
+                    ClientInterface clientInterface = new(client, userList);
+                    clientInterface.StartToRead();
+                }
+                catch (Exception) { break; }
             }
         }
     }

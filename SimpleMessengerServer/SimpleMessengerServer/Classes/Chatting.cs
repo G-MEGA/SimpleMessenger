@@ -56,7 +56,12 @@ namespace SimpleMessengerServer.Classes
             {
                 users.Remove(user.GetID());
                 user.ExitChatting(this);
-                //To do 채팅의 참가자 목록 변경
+
+                foreach (User u in users.Values)
+                {
+                    u.OnOtherUserExitChatting(GetID());
+                }
+
                 return true;
             }
             else

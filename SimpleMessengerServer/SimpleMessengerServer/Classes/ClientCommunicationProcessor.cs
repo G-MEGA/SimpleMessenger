@@ -45,50 +45,69 @@ namespace SimpleMessengerServer.Classes
                 // register/(id)/(password)/(nickname)
                 case "register":
                     request = BytesToRequestForm(bytes);
+                    StringArrayWriteConsole(request);
+
                     Register(request[1], request[2], request[3]);
                     break;
                 // login/(id)/(password)
                 case "login":
                     request = BytesToRequestForm(bytes);
+                    StringArrayWriteConsole(request);
+
                     Login(request[1], request[2]);
                     break;
                 // logout/
                 case "logout":
+                    StringArrayWriteConsole(new string[] { "logout" });
+
                     Logout();
                     break;
                 // modifyProfile/(nickname)/(selfIntroduction)
                 case "modifyProfile":
                     request = BytesToRequestForm(bytes, 3);
+                    StringArrayWriteConsole(request);
+
                     ModifyProfile(request[1], request[2]);
                     break;
                 // addUserToContactList/(id)
                 case "addUserToContactList":
                     request = BytesToRequestForm(bytes);
+                    StringArrayWriteConsole(request);
+
                     AddUserToContactList(request[1]);
                     break;
                 // removeUserInContactList/(id)
                 case "removeUserInContactList":
                     request = BytesToRequestForm(bytes);
+                    StringArrayWriteConsole(request);
+
                     RemoveUserInContactList(request[1]);
                     break;
                 // startChatting/(1대1여부)/(참가자들 id목록 쉼표,로 구분)/(타이틀)
                 case "startChatting":
                     request = BytesToRequestForm(bytes, 4);
+                    StringArrayWriteConsole(request);
+
                     StartChatting(request[1], request[2], request[3]);
                     break;
                 // inviteChatting/(userID)/(chattingID)
                 case "inviteChatting":
                     request = BytesToRequestForm(bytes);
+                    StringArrayWriteConsole(request);
+
                     InviteChatting(request[1], request[2]);
                     break;
                 // makeTextMessage/(chattingID)/(text)
                 case "makeTextMessage":
                     request = BytesToRequestForm(bytes, 3);
+                    StringArrayWriteConsole(request);
+
                     MakeTextMessage(request[1], request[2]);
                     break;
                 // makeFileMessage/(chattingID)/(fileName)/(fileData)
                 case "makeFileMessage":
                     request = requestHeadStr.Split("/", 4, StringSplitOptions.None);
+                    StringArrayWriteConsole(request, 3);
 
                     string requestStrWithoutFileData = request[0] + "/";
                     requestStrWithoutFileData += request[1] + "/";
@@ -97,6 +116,27 @@ namespace SimpleMessengerServer.Classes
                     int byteLength = StringToBytes(requestStrWithoutFileData).Length;
 
                     MakeFileMessage(request[1], request[2], bytes[byteLength..]);
+                    break;
+                // exitFromChatting/(chattingID)
+                case "exitFromChatting":
+                    request = BytesToRequestForm(bytes);
+                    StringArrayWriteConsole(request);
+
+                    ExitFromChatting(request[1]);
+                    break;
+                // searchUser/(keyword)
+                case "searchUser":
+                    request = BytesToRequestForm(bytes);
+                    StringArrayWriteConsole(request);
+
+                    SearchUser(request[1]);
+                    break;
+                // fileMessageDownload/(chattingID)/(messageIndex)
+                case "fileMessageDownload":
+                    request = BytesToRequestForm(bytes);
+                    StringArrayWriteConsole(request);
+
+                    FileMessageDownload(request[1], request[2]);
                     break;
                 default:
                     break;
@@ -120,6 +160,7 @@ namespace SimpleMessengerServer.Classes
                     if (userList.HasID(id))
                     {
                         clientInterface.Write(StringToBytes("registerFail/idAlreadyExists/"));
+                        Console.WriteLine("Output   " + "registerFail/idAlreadyExists/");
                     }
                 }
             }
@@ -139,6 +180,7 @@ namespace SimpleMessengerServer.Classes
                 else
                 {
                     clientInterface.Write(StringToBytes("loginFail/"));
+                    Console.WriteLine("Output   " + "loginFail/");
                 }
             }
         }
@@ -209,6 +251,38 @@ namespace SimpleMessengerServer.Classes
                 user.GetChattings()[Convert.ToInt32(chattingIDStr)].AddMessage(message);
             }
         }
+        private void ExitFromChatting(string chattingIDStr)
+        {
+            if (IsLogin())
+            {
+                user.GetChattings()[Convert.ToInt32(chattingIDStr)].Exit(user);
+            }
+        }
+        private void SearchUser(string keyword)
+        {
+            List<User> searchResult = userList.SearchUser(keyword);
+            SendSearchResult(searchResult);
+        }
+        private void FileMessageDownload(string chattingIDStr, string messageIndexStr)
+        {
+            if (IsLogin())
+            {
+                int chattingID = Convert.ToInt32(chattingIDStr);
+                int messageIndex = Convert.ToInt32(messageIndexStr);
+
+                Message msg = user.GetChattings()[chattingID].GetMessage(messageIndex);
+                if(msg is FileMessage)
+                {
+                    SendFileDownload((msg as FileMessage).GetFileName(), (msg as FileMessage).GetFileData());
+                }
+                else
+                {
+                    clientInterface.Write(StringToBytes("fileDownloadFail/"));
+                    Console.WriteLine("Output   " + "fileDownloadFail/");
+                }
+            }
+        }
+
         // userProfile/(id)/(nickname)/(selfIntroduction)
         public void SendUserProfile(string id)
         {
@@ -218,6 +292,7 @@ namespace SimpleMessengerServer.Classes
             {
                 string str = "userProfile/" + id + "/" + targetUser.GetNickname() + "/" + targetUser.GetSelfIntroduction();
                 clientInterface.Write(StringToBytes(str));
+                Console.WriteLine("Output   " + str);
             }
         }
         // addToContactList/(id)
@@ -225,12 +300,14 @@ namespace SimpleMessengerServer.Classes
         {
             string str = "addToContactList/" + id;
             clientInterface.Write(StringToBytes(str));
+            Console.WriteLine("Output   " + str);
         }
         // removeInContactList/(id)
         public void SendRemoveInContactList(string id)
         {
             string str = "removeInContactList/" + id;
             clientInterface.Write(StringToBytes(str));
+            Console.WriteLine("Output   " + str);
         }
         // chatting/(id)/(1대1여부)/(참가자들 id목록 쉼표,로 구분)/(타이틀)
         public void SendChatting(int id)
@@ -245,12 +322,14 @@ namespace SimpleMessengerServer.Classes
             }
             str += "/" + chatting.GetTitle();
             clientInterface.Write(StringToBytes(str));
+            Console.WriteLine("Output   " + str);
         }
         // removeChatting/(id)
         public void SendRemoveChatting(int id)
         {
             string str = "removeChatting/" + id.ToString();
             clientInterface.Write(StringToBytes(str));
+            Console.WriteLine("Output   " + str);
         }
         // chattingMessage/(채팅 id)/(메시지 index)/userID/(time int가 아니라 Long임)/(typeCode)/(text)
         public void SendChattingMessage(int id, int index)
@@ -265,6 +344,25 @@ namespace SimpleMessengerServer.Classes
             str += message.GetMessageTypeCode() + "/";
             str += message.GetTextToDisplayToUser();
             clientInterface.Write(StringToBytes(str));
+            Console.WriteLine("Output   " + str);
+        }
+        // searchResult/(id),(nickname)/.../(id),(nickname)
+        private void SendSearchResult(List<User> searchResult)
+        {
+            string str = "searchResult";
+            foreach (User u in searchResult)
+            {
+                str += "/" + u.GetID() + "," + u.GetNickname();
+            }
+            clientInterface.Write(StringToBytes(str));
+            Console.WriteLine("Output   " + str);
+        }
+        // fileDownload/(fileName)/(fileData)
+        private void SendFileDownload(string fileName, byte[] filedata)
+        {
+            string str = "fileDownload/" + fileName + "/";
+            clientInterface.Write(StringToBytes(str).Concat(filedata).ToArray());
+            Console.WriteLine("Output   " + str);
         }
 
         private void StartClient()
@@ -296,6 +394,9 @@ namespace SimpleMessengerServer.Classes
                         SendChattingMessage(id, i);
                     }
                 }
+
+                clientInterface.Write(StringToBytes("loginSuccess/"));
+                Console.WriteLine("Output   " + "loginSuccess/");
             }
         }
 
@@ -322,6 +423,26 @@ namespace SimpleMessengerServer.Classes
         private string[] BytesToRequestForm(byte[] bytes, int count)
         {
             return BytesToString(bytes).Split("/", count, StringSplitOptions.None);
+        }
+
+        private void StringArrayWriteConsole(string[] strArr, int count = -1)
+        {
+            if (count < 0)
+            {
+                foreach(string str in strArr)
+                {
+                    Console.Write(str + "/");
+                }
+                Console.WriteLine();
+            }
+            else
+            {
+                for(int i = 0; i < count; i++)
+                {
+                    Console.Write(strArr[i] + "/");
+                }
+                Console.WriteLine();
+            }
         }
     }
 }

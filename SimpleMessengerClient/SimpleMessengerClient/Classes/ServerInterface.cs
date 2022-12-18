@@ -1,38 +1,43 @@
-﻿using System;
+﻿using SimpleMessenger.Classes;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace SimpleMessengerServer.Classes
+namespace SimpleMessenger
 {
-    internal class ClientInterface
+    internal class ServerInterface
     {
-        ClientCommunicationProcessor processor;
+        ServerCommunicationProcessor processor;
         Thread threadToRead;
 
         TcpClient tcpClient;
 
         bool isDisconnecting;
 
-        public ClientInterface(TcpClient c, UserList ul)
+        public ServerInterface(UserList ul, ChattingList cl)
         {
-            tcpClient = c;
+            tcpClient = new();
 
-            processor = new(ul, this);
-            threadToRead = new Thread(Read);
+            processor = new(ul, cl, this);
+            threadToRead = new(Read);
 
             isDisconnecting = false;
         }
-        public void StartToRead()
+
+        public ServerCommunicationProcessor GetProcessor()
+        {
+            return processor;
+        }
+
+        public void Connect(string host, int port)
         {
             if (!isDisconnecting)
             {
+                tcpClient.Connect(host, port);
                 threadToRead.Start();
             }
         }
@@ -41,14 +46,13 @@ namespace SimpleMessengerServer.Classes
             if (!isDisconnecting)
             {
                 isDisconnecting = true;
-                processor.OnClientInterfaceDisconnecting();
+                processor.OnServerInterfaceDisconnecting();
 
                 threadToRead.Join();
 
                 tcpClient.Close();
             }
         }
-
 
         private void Read()
         {
@@ -112,7 +116,7 @@ namespace SimpleMessengerServer.Classes
         {
             if (!isDisconnecting)
             {
-                processor.ProcessClientRequest(bytes);
+                processor.ProcessDataFromServer(bytes);
             }
         }
 
