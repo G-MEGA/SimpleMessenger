@@ -50,6 +50,17 @@ namespace SimpleMessenger
 
         private void loginButton_Click(object sender, EventArgs e)
         {
+            if (idBox.Text.Equals(""))
+            {
+                failText.Text = "id를 입력하세요.";
+                return;
+            }
+            if (passwordBox.Text.Equals(""))
+            {
+                failText.Text = "비밀번호를 입력하세요.";
+                return;
+            }
+
             idBox.Enabled = false;
             passwordBox.Enabled = false;
             loginButton.Enabled = false;

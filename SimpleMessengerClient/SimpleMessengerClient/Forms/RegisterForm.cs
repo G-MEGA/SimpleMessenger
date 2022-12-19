@@ -55,6 +55,28 @@ namespace SimpleMessengerClient.Forms
                 failText.Text = "비밀번호가 일치하지 않습니다.";
                 return;
             }
+            if (idBox.Text.Contains('/') || idBox.Text.Contains(',')
+                || passwordBox.Text.Contains('/') || passwordBox.Text.Contains(',')
+                || nicknameBox.Text.Contains('/') || nicknameBox.Text.Contains(','))
+            {
+                failText.Text = "콤마(,)와 슬래시(/)는 사용할 수 없습니다.";
+                return;
+            }
+            if (idBox.Text.Equals(""))
+            {
+                failText.Text = "id를 입력하세요.";
+                return;
+            }
+            if (passwordBox.Text.Equals(""))
+            {
+                failText.Text = "비밀번호를 입력하세요.";
+                return;
+            }
+            if (nicknameBox.Text.Equals(""))
+            {
+                failText.Text = "닉네임을 입력하세요.";
+                return;
+            }
 
             idBox.Enabled = false;
             nicknameBox.Enabled = false;

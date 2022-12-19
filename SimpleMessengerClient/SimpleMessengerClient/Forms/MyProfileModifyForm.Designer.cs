@@ -37,9 +37,10 @@
             // 
             // confirmButton
             // 
-            this.confirmButton.Location = new System.Drawing.Point(174, 409);
+            this.confirmButton.Location = new System.Drawing.Point(135, 307);
+            this.confirmButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.confirmButton.Name = "confirmButton";
-            this.confirmButton.Size = new System.Drawing.Size(94, 29);
+            this.confirmButton.Size = new System.Drawing.Size(73, 22);
             this.confirmButton.TabIndex = 0;
             this.confirmButton.Text = "확인";
             this.confirmButton.UseVisualStyleBackColor = true;
@@ -47,50 +48,54 @@
             // 
             // nicknameBox
             // 
-            this.nicknameBox.Location = new System.Drawing.Point(32, 41);
+            this.nicknameBox.Location = new System.Drawing.Point(25, 31);
+            this.nicknameBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nicknameBox.Name = "nicknameBox";
-            this.nicknameBox.Size = new System.Drawing.Size(396, 27);
+            this.nicknameBox.Size = new System.Drawing.Size(309, 23);
             this.nicknameBox.TabIndex = 1;
             // 
             // selfIntroductionBox
             // 
-            this.selfIntroductionBox.Location = new System.Drawing.Point(32, 111);
+            this.selfIntroductionBox.Location = new System.Drawing.Point(25, 83);
+            this.selfIntroductionBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.selfIntroductionBox.Multiline = true;
             this.selfIntroductionBox.Name = "selfIntroductionBox";
-            this.selfIntroductionBox.Size = new System.Drawing.Size(396, 253);
+            this.selfIntroductionBox.Size = new System.Drawing.Size(309, 191);
             this.selfIntroductionBox.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(32, 18);
+            this.label1.Location = new System.Drawing.Point(25, 14);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(54, 20);
+            this.label1.Size = new System.Drawing.Size(43, 15);
             this.label1.TabIndex = 3;
             this.label1.Text = "닉네임";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(32, 88);
+            this.label2.Location = new System.Drawing.Point(25, 66);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(69, 20);
+            this.label2.Size = new System.Drawing.Size(55, 15);
             this.label2.TabIndex = 4;
             this.label2.Text = "자기소개";
             // 
             // MyProfileModifyForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(461, 450);
+            this.ClientSize = new System.Drawing.Size(359, 338);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.selfIntroductionBox);
             this.Controls.Add(this.nicknameBox);
             this.Controls.Add(this.confirmButton);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "MyProfileModifyForm";
             this.Text = "MyProfileModifyForm";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MyProfileModifyForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

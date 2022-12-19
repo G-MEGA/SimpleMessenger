@@ -25,13 +25,21 @@ namespace SimpleMessengerClient.Forms
             selfIntroductionBox.Text = currentSelfIntroduction;
         }
 
-        private void MyProfileModifyForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            server.SendModifyProfile(nicknameBox.Text, selfIntroductionBox.Text);
-        }
-
         private void confirmButton_Click(object sender, EventArgs e)
         {
+
+            if (nicknameBox.Text.Contains('/') || nicknameBox.Text.Contains(','))
+            {
+                MessageBox.Show("닉네임에 콤마(,)와 슬래시(/)는 사용할 수 없습니다.");
+                return;
+            }
+            if (nicknameBox.Text.Equals(""))
+            {
+                MessageBox.Show("닉네임을 입력하세요.");
+                return;
+            }
+
+            server.SendModifyProfile(nicknameBox.Text, selfIntroductionBox.Text);
             Close();
         }
     }
