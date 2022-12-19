@@ -1,4 +1,5 @@
 ﻿using SimpleMessenger.Classes;
+using SimpleMessengerClient.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,12 @@ namespace SimpleMessenger
 {
     internal static class Program
     {
+        static bool isTerminating = false;
+        public static void SetTerminatingFlag()
+        {
+            isTerminating = true;
+        }
+
         /// <summary>
         /// 해당 애플리케이션의 주 진입점입니다.
         /// </summary>
@@ -18,13 +25,45 @@ namespace SimpleMessenger
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            UserList userList = new UserList();
-            ChattingList chattingList = new ChattingList();
 
-            ServerInterface serverInterface = new ServerInterface(userList, chattingList);
-            serverInterface.Connect("127.0.0.1", 9999);
+            //Application.Run(new TestForm());
 
-            Application.Run(new LoginForm());
+            while (!isTerminating)
+            {
+                UserList userList = new UserList();
+                ChattingList chattingList = new ChattingList();
+
+                ServerInterface serverInterface = new ServerInterface(userList, chattingList);
+
+                bool connected = false;
+                try
+                {
+                    serverInterface.Connect("127.0.0.1", 9999);
+                    connected = true;
+                }
+                catch (Exception ex)
+                {
+                    connected = false;
+                }
+
+                if (connected)
+                {
+                    Application.Run(new LoginForm(serverInterface.GetProcessor()));
+
+                    if (serverInterface.GetProcessor().IsSuccessedLogin())
+                    {
+                        // Mainform
+                        Application.Run(new MainForm(serverInterface.GetProcessor(), userList, chattingList));
+                    }
+
+                    serverInterface.Disconnect();
+                }
+                else
+                {
+                    Application.Run(new CantConnectToServerForm());
+                }
+            }
+
         }
     }
 }

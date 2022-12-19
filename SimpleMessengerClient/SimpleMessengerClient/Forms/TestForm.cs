@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SimpleMessenger
+namespace SimpleMessengerClient.Forms
 {
-    public partial class Form1 : Form
+    public partial class TestForm : Form
     {
-        public Form1()
+        public TestForm()
         {
             InitializeComponent();
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

@@ -42,8 +42,11 @@ namespace SimpleMessengerServer.Classes
             {
                 isDisconnecting = true;
                 processor.OnClientInterfaceDisconnecting();
-
-                threadToRead.Join();
+                
+                if (Thread.CurrentThread != threadToRead)
+                {
+                    threadToRead.Join();
+                }
 
                 tcpClient.Close();
             }
@@ -106,6 +109,8 @@ namespace SimpleMessengerServer.Classes
                 }
 
                 Thread.Sleep(100);
+
+                Write(Encoding.UTF8.GetBytes("heartBeat/"));
             }
         }
         private void OnDataReceived(byte[] bytes)

@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
+using SimpleMessengerClient.Forms;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +11,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace SimpleMessenger.Classes
 {
-    internal class ServerCommunicationProcessor
+    public class ServerCommunicationProcessor
     {
         UserList userList;
         ChattingList chattingList;
@@ -19,6 +21,12 @@ namespace SimpleMessenger.Classes
         string myPassword;
         bool isTryingLogin;
         bool isSuccessedLogin;
+
+        LoginForm? loginForm;
+        RegisterForm? registerForm;
+        MainForm? mainForm;
+
+        public event SearchedUsers? SearchedUsers;
 
         public ServerCommunicationProcessor(UserList ul, ChattingList cl, ServerInterface si) 
         {
@@ -30,6 +38,23 @@ namespace SimpleMessenger.Classes
             myPassword = "";
             isTryingLogin = false;
             isSuccessedLogin = false;
+        }
+
+        public bool IsSuccessedLogin()
+        {
+            return isSuccessedLogin;
+        }
+        public void SetLoginForm(LoginForm? form)
+        {
+            loginForm = form;
+        }
+        public void SetRegisterForm(RegisterForm? form)
+        {
+            registerForm = form;
+        }
+        public void SetMainForm(MainForm? form)
+        {
+            mainForm = form;
         }
 
         public void OnServerInterfaceDisconnecting()
@@ -103,7 +128,14 @@ namespace SimpleMessenger.Classes
                 case "searchResult":
                     request = BytesToRequestForm(bytes, 2);
 
-                    SearchResult(request[1]);
+                    if(request.Length > 1)
+                    {
+                        SearchResult(request[1]);
+                    }
+                    else
+                    {
+                        SearchResult("");
+                    }
                     break;
                 // fileDownload/(fileName)/(fileData)
                 case "fileDownload":
@@ -124,28 +156,21 @@ namespace SimpleMessenger.Classes
                     break;
             }
         }
-
+        
 
         private void RegisterFail(string reason)
         {
             isTryingLogin = false;
             isSuccessedLogin = false;
 
-            if (reason.Equals("idAlreadyExists"))
-            {
-                // To do gui연결
-            }
-            else 
-            {
-                // To do gui연결
-            }
+            registerForm?.Invoke(registerForm.OnRegisterFail, reason);
         }
         private void LoginFail()
         {
             isTryingLogin = false;
             isSuccessedLogin = false;
 
-            // To do gui연결
+            loginForm?.Invoke(loginForm.OnLoginFail);
         }
         private void LoginSuccess()
         {
@@ -153,7 +178,8 @@ namespace SimpleMessenger.Classes
             isSuccessedLogin = true;
             userList.SetMyID(myID);
 
-            // To do gui연결
+            registerForm?.Invoke(registerForm.Close);
+            loginForm?.Invoke(loginForm.Close);
         }
         private void UserProfile(string id, string nickname, string selfIntroduction)
         {
@@ -191,15 +217,33 @@ namespace SimpleMessenger.Classes
                 string[] splited = str.Split(',', StringSplitOptions.None);
                 idNickname[splited[0]] = splited[1];
             }
-            // To do gui연결 idNickname을 GUI에 넣어주든가 해야할 듯
+            SearchedUsers?.Invoke(idNickname);
         }
         private void FileDownload(string fileName, byte[] fileData)
         {
-            // To do gui연결
+            mainForm?.Invoke(() =>
+            {
+                SaveFileDialog save = new();
+                save.FileName = fileName;
+                save.Title = "저장 경로 지정";
+                save.OverwritePrompt = true;
+                save.DefaultExt = fileName.Split('.', StringSplitOptions.TrimEntries).Last();
+
+                if (save.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllBytes(save.FileName, fileData);
+
+                    //FileStream fileStream = (FileStream)save.OpenFile();
+
+                    //fileStream.Write(fileData, 0, fileData.Length);
+
+                    //fileStream.Close();
+                }
+            });
         }
         private void FileDownloadFail()
         {
-            // To do gui연결
+            mainForm?.OnFileDownloadFail();
         }
 
         // register/(id)/(password)/(nickname)
@@ -364,4 +408,6 @@ namespace SimpleMessenger.Classes
             return BytesToString(bytes).Split("/", count, StringSplitOptions.None);
         }
     }
+
+    public delegate void SearchedUsers(Dictionary<string, string> id_nickname);
 }

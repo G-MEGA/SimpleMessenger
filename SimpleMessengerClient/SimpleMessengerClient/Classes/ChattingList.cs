@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace SimpleMessenger.Classes
 {
-    internal class ChattingList
+    public class ChattingList
     {
         Dictionary<string, Chatting> chattings;
+
+        public event Updated? ChattingsUpdated;
+
+        public ChattingList() { 
+            chattings= new Dictionary<string, Chatting>();
+        }
 
         public void SetChatting(string chatID, bool isOneOnOne, string[] userIDList, string title)
         {
@@ -20,7 +26,7 @@ namespace SimpleMessenger.Classes
             {
                 chattings[chatID] = new(chatID, title, isOneOnOne, userIDList);
             }
-            // To do gui와 연결
+            ChattingsUpdated?.Invoke();
         }
         public void RemoveChatting(string chatID)
         {
@@ -29,7 +35,7 @@ namespace SimpleMessenger.Classes
                 chattings[chatID].OnRemovedAtChattingList();
                 chattings.Remove(chatID);
             }
-            // To do gui와 연결
+            ChattingsUpdated?.Invoke();
         }
         public Chatting? GetChatting(string chatID)
         {
@@ -42,6 +48,10 @@ namespace SimpleMessenger.Classes
                 return null;
             }
         }
+        public Dictionary<string, Chatting> GetAllChattings()
+        {
+            return chattings;
+        }
 
         public void SetMessage(string chatID, int messageIndex, string userID, long time, string typeCode, string text)
         {
@@ -49,7 +59,25 @@ namespace SimpleMessenger.Classes
             {
                 chattings[chatID].SetMessage(messageIndex, userID, time, typeCode, text);
             }
-            // To do gui와 연결
+        }
+
+        public bool IsThereOneOnOneWith(string userID)
+        {
+            foreach(var chat in GetAllChattings().Values)
+            {
+                if (chat.IsOneOnOne())
+                {
+                    foreach(string id in chat.GetUserIDs())
+                    {
+                        if (userID.Equals(id))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

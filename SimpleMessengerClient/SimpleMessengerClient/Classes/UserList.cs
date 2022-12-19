@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace SimpleMessenger.Classes
 {
-    internal class UserList
+    public class UserList
     {
         string myID;
         List<string> contactIDs;
         Dictionary<string, User> users;
+
+        public event Updated? MyIDUpdated;
+        public event Updated? ContactListUpdated;
 
         public UserList() 
         {
@@ -22,7 +25,11 @@ namespace SimpleMessenger.Classes
         public void SetMyID(string id)
         {
             myID = id;
-            // To do gui연결
+            MyIDUpdated?.Invoke();
+        }
+        public string GetMyID()
+        {
+            return myID;
         }
 
         public void SetUserProfile(string id, string nickname, string selfIntroduction)
@@ -41,7 +48,7 @@ namespace SimpleMessenger.Classes
             if (!contactIDs.Contains(id))
             {
                 contactIDs.Add(id);
-                // To do gui연결
+                ContactListUpdated?.Invoke();
             }
         }
         public void RemoveInContactList(string id)
@@ -49,8 +56,16 @@ namespace SimpleMessenger.Classes
             if (contactIDs.Contains(id))
             {
                 contactIDs.Remove(id);
-                // To do gui연결
+                ContactListUpdated?.Invoke();
             }
+        }
+        public List<string> GetContactList()
+        {
+            return contactIDs;
+        }
+        public bool IsContact(string id)
+        {
+            return contactIDs.Contains(id);
         }
 
         public User GetUser(string id)

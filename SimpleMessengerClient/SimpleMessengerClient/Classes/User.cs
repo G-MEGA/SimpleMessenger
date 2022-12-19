@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace SimpleMessenger.Classes
 {
-    internal class User
+    public class User
     {
         string id;
         string nickname;
         string selfIntroduction;
+
+        public event Updated? Updated;
 
         public User(string initiialID, string initiialNickname, string initiialSelfIntroduction)
         {
@@ -22,7 +24,7 @@ namespace SimpleMessenger.Classes
         {
             nickname = newNickname;
             selfIntroduction = newSelfIntroduction;
-            // To do gui 연결
+            Updated?.Invoke();
         }
 
         public string GetID()
@@ -38,4 +40,6 @@ namespace SimpleMessenger.Classes
             return selfIntroduction;
         }
     }
+
+    public delegate void Updated();
 }

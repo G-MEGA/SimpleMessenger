@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SimpleMessenger
 {
-    internal class ServerInterface
+    public class ServerInterface
     {
         ServerCommunicationProcessor processor;
         Thread threadToRead;
@@ -48,7 +48,10 @@ namespace SimpleMessenger
                 isDisconnecting = true;
                 processor.OnServerInterfaceDisconnecting();
 
-                threadToRead.Join();
+                if (Thread.CurrentThread != threadToRead)
+                {
+                    threadToRead.Join();
+                }
 
                 tcpClient.Close();
             }

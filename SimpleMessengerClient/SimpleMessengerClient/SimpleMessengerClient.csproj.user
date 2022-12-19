@@ -1,13 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Compile Update="Form1.cs">
+    <Compile Update="Controls\AddUserToContactListButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Controls\ChattingButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Controls\MessageDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Controls\UserProfileButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\AddUserToContactListForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Form1.cs">
+    <Compile Update="Forms\CantConnectToServerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ChattingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\InviteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\MyProfileModifyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\RegisterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\StartGroupChatForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\TestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\UserProfileForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

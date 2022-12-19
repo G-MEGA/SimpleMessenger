@@ -142,6 +142,7 @@ namespace SimpleMessengerServer.Classes
                 user.AddedToContactListOf(this);
                 foreach (ClientCommunicationProcessor client in clients)
                 {
+                    client.SendUserProfile(user.GetID());
                     client.SendAddToContactList(user.GetID());
                 }
                 return true;

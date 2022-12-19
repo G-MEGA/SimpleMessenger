@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SimpleMessenger.Classes;
+using SimpleMessengerClient.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,34 +15,53 @@ namespace SimpleMessenger
 {
     public partial class LoginForm : Form
     {
-        public int i = 0;
+        ServerCommunicationProcessor serverCommunication;
 
-        public LoginForm()
+        public LoginForm(ServerCommunicationProcessor sp)
         {
             InitializeComponent();
+
+            serverCommunication = sp;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void LoginForm_Shown(object sender, EventArgs e)
         {
-            var a = new System.Windows.Forms.PictureBox();
+            serverCommunication.SetLoginForm(this);
         }
 
-        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
+            if (!serverCommunication.IsSuccessedLogin())
+            {
+                Program.SetTerminatingFlag();
+            }
+            serverCommunication.SetLoginForm(null);
         }
 
-        private void ASD(object sender, EventArgs e)
+        public void OnLoginFail()
         {
+            idBox.Enabled = true;
+            passwordBox.Enabled = true;
+            loginButton.Enabled = true;
+            registerButton.Enabled = true;
 
-            Thread t = new Thread(TestThread);
-            t.Start();
+            failText.Text = "ID 또는 Password가 유효하지 않습니다.";
         }
 
-        private void TestThread()
+        private void loginButton_Click(object sender, EventArgs e)
         {
-            i++;
-            textBox1.Text = i.ToString();
+            idBox.Enabled = false;
+            passwordBox.Enabled = false;
+            loginButton.Enabled = false;
+            registerButton.Enabled = false;
+
+            serverCommunication.SendLogin(idBox.Text, passwordBox.Text);
+        }
+
+        private void registerButton_Click(object sender, EventArgs e)
+        {
+            RegisterForm registerForm = new(serverCommunication);
+            registerForm.ShowDialog();
         }
     }
 }

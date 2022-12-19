@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace SimpleMessenger.Classes
 {
-    internal class Chatting
+    public class Chatting
     {
         string id;
         string title;
@@ -15,6 +15,10 @@ namespace SimpleMessenger.Classes
         string[] userIDs;
 
         List<Message?> messages;
+
+        public event Updated? InfoUpdated;
+        public event ElementUpdated? MessageAdded;
+        public event Updated? Removed;
 
         public Chatting(string initialID, string initialTitle, bool initialIsOneOnOne, string[] initialUserIDs)
         {
@@ -33,7 +37,7 @@ namespace SimpleMessenger.Classes
             isOneOnOne = newIsOneOnOne;
             userIDs = newUserIDs;
 
-            // To do gui와 연결
+            InfoUpdated?.Invoke();
         }
         public void SetMessage(int messageIndex, string userID, long time, string typeCode, string text)
         {
@@ -49,14 +53,39 @@ namespace SimpleMessenger.Classes
 
             if (messages[messageIndex] == null)
             {
-                messages[messageIndex] = new Message(userID, time, typeCode, text);
+                messages[messageIndex] = new Message(messageIndex, userID, time, typeCode, text);
+                MessageAdded?.Invoke(messageIndex);
             }
-            // To do gui와 연결
+        }
+        public string GetID()
+        {
+            return id;
+        }
+        public string GetTitle()
+        {
+            return title;
+        }
+        public Message? GetMessage(int messageIndex)
+        {
+            return messages[messageIndex];
+        }
+        public int GetMessageCount()
+        {
+            return messages.Count;
+        }
+        public bool IsOneOnOne()
+        {
+            return isOneOnOne;
+        }
+        public string[] GetUserIDs()
+        {
+            return userIDs;
         }
 
         public void OnRemovedAtChattingList()
         {
-            // To do gui와 연결
+            Removed?.Invoke();
         }
     }
+    public delegate void ElementUpdated(int index);
 }

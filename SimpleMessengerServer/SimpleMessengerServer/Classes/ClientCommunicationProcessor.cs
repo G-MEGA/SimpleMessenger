@@ -315,7 +315,7 @@ namespace SimpleMessengerServer.Classes
             Chatting chatting = user.GetChattings()[id];
 
             string str = "chatting/" + id.ToString() + "/";
-            str += chatting.IsOneOnOne() ? "true" : "false" + "/";
+            str += (chatting.IsOneOnOne() ? "true" : "false") + "/";
             foreach(string userID in chatting.GetAllUsers().Keys)
             {
                 str += userID + ",";
