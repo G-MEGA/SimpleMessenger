@@ -225,9 +225,16 @@ namespace SimpleMessengerClient.Forms
         {
             if (!textBox.Text.Equals(""))
             {
-                server.SendMakeTextMessage(chatting.GetID(), textBox.Text);
+                if (textBox.Text.Length <= 1000)
+                {
+                    server.SendMakeTextMessage(chatting.GetID(), textBox.Text);
 
-                textBox.Text = "";
+                    textBox.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("1000자를 초과하는 메시지는 전송할 수 없습니다.");
+                }
             }
         }
         private void fileButton_Click(object sender, EventArgs e)
@@ -239,11 +246,18 @@ namespace SimpleMessengerClient.Forms
             if(open.ShowDialog() == DialogResult.OK)
             {
                 byte[] bytes = File.ReadAllBytes(open.FileName);
+                
+                if (bytes.Length <= 52_428_800)
+                {
+                    string fileName = open.FileName.Split('\\').Last();
 
-                string fileName = open.FileName.Split('\\').Last();
-
-                server.SendMakeFileMessage(
-                    chatting.GetID(), fileName, bytes);
+                    server.SendMakeFileMessage(
+                        chatting.GetID(), fileName, bytes);
+                }
+                else
+                {
+                    MessageBox.Show("50MB를 초과하는 파일은 전송할 수 없습니다.");
+                }
             }
         }
 
